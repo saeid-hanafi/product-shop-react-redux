@@ -41,7 +41,7 @@ let initializeState = [
         hasOff : true,
         offValue : 51,
         image  : "/images/products/113013122.jpg",
-        price : 29000
+        price : 30000
     },
 
 ];
