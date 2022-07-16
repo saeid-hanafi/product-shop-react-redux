@@ -1,19 +1,32 @@
 import React from "react";
 import './BasketItem.css';
+import {connect} from "react-redux";
+import {removeProductFromBasket} from "../actions";
 
+/**
+ * This Class Load Basket Item Information
+ */
 class BasketItem extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    removeThisItem = () => {
-        return this.props.removeItem(this.props.basketInfo.id);
+    removeBasketItems = () => {
+        let productID = this.props.basketInfo['id'];
+        let basket = this.props.basket.basket_items;
+        let basketIDs = this.props.basket.basket_items_id;
+        let basketIndex = basket.findIndex(basketItem => (productID === basketItem.id));
+        let basketIDIndex = basketIDs.findIndex(itemID => (productID === itemID));
+
+        if (basketIndex >= 0 && basketIDIndex >= 0) {
+            this.props.removeProductFromBasket(basketIndex, basketIDIndex);
+        }
     }
 
     render() {
         return (
             <div className="BasketItem">
-                <div className="BasketItem-close-btn c-ui-icon c-ui-icon--remove" onClick={this.removeThisItem}></div>
+                <div className="BasketItem-close-btn c-ui-icon c-ui-icon--remove" onClick={this.removeBasketItems}></div>
                 <div className="BasketItem-image">
                     <div className="BasketItem-image--wrapper">
                         <div className="BasketItem-image--overlay"></div>
@@ -35,5 +48,17 @@ class BasketItem extends React.Component {
 
 }
 
+/**
+ * Get States From Redux Reducers Store
+ * @param state
+ * @returns {{basket: *}}
+ */
+const mapStateToProp = (state) => {
+    return {
+        basket: state.basket,
+    }
+}
 
-export default BasketItem;
+export default connect(mapStateToProp, {
+    removeProductFromBasket,
+})(BasketItem);

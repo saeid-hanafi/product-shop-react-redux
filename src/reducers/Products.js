@@ -1,3 +1,7 @@
+/**
+ * Set Initialize Products
+ * @type {({hasOff: boolean, image: string, offValue: number, hasDiscount: boolean, price: number, name: string, id: number, brand: string, discountValue: number}|{hasOff: boolean, image: string, offValue: number, hasDiscount: boolean, price: number, name: string, id: number, brand: string, discountValue: number}|{hasOff: boolean, image: string, offValue: number, hasDiscount: boolean, price: number, name: string, id: number, brand: string, discountValue: number}|{hasOff: boolean, image: string, offValue: number, hasDiscount: boolean, price: number, name: string, id: number, brand: string, discountValue: number})[]}
+ */
 let initializeState = [
     {
         id : 1,
@@ -46,6 +50,25 @@ let initializeState = [
 
 ];
 
+/**
+ * Products Reducer
+ * @param state
+ * @param action
+ * @returns {{hasOff: boolean, image: string, offValue: number, hasDiscount: boolean, price: number, name: string, id: number, brand: string, discountValue: number}[]}
+ */
 export default (state = initializeState, action) => {
+    if (action.type === "SEARCHPRODUCT") {
+        let result = [];
+        let searchVal = action.payload.searchVal;
+        state.map(productInfo => {
+            if (productInfo.id === searchVal ||
+                productInfo.name.search(searchVal) >= 0 ||
+                productInfo.brand.search(searchVal) >= 0) {
+                result.push(productInfo);
+            }
+        });
+
+        return result;
+    }
     return state;
 };

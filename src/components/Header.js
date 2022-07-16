@@ -3,14 +3,21 @@ import "./Header.css";
 import DigiStyleLogo from '../assets/images/digistyle_logo.svg';
 import BasketItem from "./BasketItem";
 import {connect} from "react-redux";
+import {searchProduct} from "../actions";
 
+/**
+ * This Class Load Page Header And Basket Items
+ */
 class Header extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    searchProductCallBack = event => {
-        console.log(this.props.serchRes(event));
+    getSearchResult = event => {
+        let searchVal   = event.target.value;
+        if (typeof searchVal === "string") {
+            this.props.searchProduct(searchVal);
+        }
     }
 
     render() {
@@ -42,7 +49,7 @@ class Header extends React.Component {
                                     </div>
                                 </div>
                                 <div className="basket-items-container">
-                                    {basket.map(basket =>(<BasketItem key={basket.id} removeItem={this.props.removeBasket} basketInfo={basket} />))}
+                                    {basket.map(basket =>(<BasketItem key={basket.id} basketInfo={basket} />))}
                                 </div>
                             </div>
                             }
@@ -72,7 +79,7 @@ class Header extends React.Component {
                     <div className="Header-col Header-search">
                         <div className="Header-search-input-container">
                             <div className="Header-search-icon c-ui-icon c-ui-icon--search-main"></div>
-                            <input type="text" placeholder="جستجو در میان 409 برند معتبر" onChange={this.searchProductCallBack}/>
+                            <input type="text" placeholder="جستجو در میان 409 برند معتبر" onChange={this.getSearchResult}/>
                         </div>
                     </div>
                 </div>
@@ -81,10 +88,17 @@ class Header extends React.Component {
     }
 }
 
+/**
+ * Get States From Redux Reducers Store
+ * @param state
+ * @returns {{basket: *}}
+ */
 const mapStateToProp = (state) => {
     return {
         basket: state.basket,
     };
 }
 
-export default connect(mapStateToProp)(Header);
+export default connect(mapStateToProp, {
+    searchProduct,
+})(Header);
